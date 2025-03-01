@@ -57,9 +57,9 @@ public abstract class Veiculo {
 
     public String toString() {
         return "\nVeículo: " +
-                "\nPlaca= " + placa +
-                "\nModelo= " + modelo + 
-                "\nAno= " + ano +
-                "\nStatus= " + status ;
+                "\n Placa= " + placa +
+                "\n Modelo= " + modelo + 
+                "\n Ano= " + ano +
+                "\n Status= " + status ;
     }
 }
