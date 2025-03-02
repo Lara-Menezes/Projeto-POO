@@ -6,7 +6,6 @@ import model.Veiculo;
 import model.Carro;
 import model.Moto;
 import model.Caminhao;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,11 +47,11 @@ public class VeiculoDAO implements Persistencia<Veiculo> {
     }
 
     // 🚗 **Factory Method** - Cria diferentes tipos de veículos dinamicamente
-    public Veiculo criarVeiculo(String tipo, String placa, String modelo, int ano) {
+    public Veiculo criarVeiculo(String tipo, String placa, String modelo, int ano, String status) {
         switch (tipo.toLowerCase()) {
-            case "carro": return new Carro(placa, modelo, ano);
-            case "moto": return new Moto(placa, modelo, ano);
-            case "caminhao": return new Caminhao(placa, modelo, ano);
+            case "carro": return new Carro(placa, modelo, ano, status);
+            case "moto": return new Moto(placa, modelo, ano, status);
+            case "caminhao": return new Caminhao(placa, modelo, ano, status);
             default: throw new IllegalArgumentException("Tipo de veículo inválido");
         }
     }
