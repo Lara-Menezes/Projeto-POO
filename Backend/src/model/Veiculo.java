@@ -7,6 +7,11 @@ public abstract class Veiculo {
     private int ano;
     private String status; 
 
+    public Veiculo() {
+    	
+    }
+    
+    
     public Veiculo(String placa, String modelo, int ano, String status) {
         this.placa = placa;
         this.modelo = modelo;

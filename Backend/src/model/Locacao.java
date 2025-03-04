@@ -11,6 +11,10 @@ public class Locacao {
     private int diasLocados;
     private double valorTotal;
     private double multaAtraso;
+    
+    public Locacao() {
+    	
+    }
 
     public Locacao(Cliente cliente, Veiculo veiculo, Date veiculoRetirada, Date veiculoDevolucao, int diasLocados) {
         this.cliente = cliente;

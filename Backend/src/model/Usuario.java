@@ -5,7 +5,12 @@ public class Usuario {
     private String nomeUsuario;
     private String senha;
     private String perfil; 
-
+    
+    
+    public Usuario() {
+    	
+    }
+    
     public Usuario(String nomeUsuario, String senha, String perfil) {
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;

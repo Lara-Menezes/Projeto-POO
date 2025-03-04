@@ -8,6 +8,10 @@ public class Pagamento {
     private double valorPago;
     private LocalDate dataPagamento;
     private String tipoPagamento; 
+    
+    public Pagamento() {
+    	
+    }
 
     public Pagamento(int idPagamento, int idLocacao, double valorPago, LocalDate dataPagamento, String tipoPagamento) {
         this.idPagamento = idPagamento;
