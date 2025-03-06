@@ -9,7 +9,7 @@ import java.util.*;
 
 public abstract class baseDAO<T> implements Persistencia<T> {
     
-    private String fileName;
+    protected String fileName;
     private Class<T> type;
     
     public baseDAO(String fileName, Class<T> type) {
@@ -45,7 +45,7 @@ public abstract class baseDAO<T> implements Persistencia<T> {
         return lista;
     }
 
-    private void escreverArquivo(List<T> lista) {
+    protected void escreverArquivo(List<T> lista) {
         try (Writer writer = Files.newBufferedWriter(Paths.get(fileName))) {
             new Gson().toJson(lista, writer);
         } catch (IOException e) {

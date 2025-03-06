@@ -6,17 +6,19 @@ public abstract class Veiculo {
     private String modelo;
     private int ano;
     private String status; 
+    private String tipo;
 
     public Veiculo() {
     	
     }
     
     
-    public Veiculo(String placa, String modelo, int ano, String status) {
+    public Veiculo(String tipo, String placa, String modelo, int ano, String status) {
         this.placa = placa;
         this.modelo = modelo;
         this.ano = ano;
         this.status = status; 
+        this.tipo = tipo;
     }
 
 
@@ -55,6 +57,14 @@ public abstract class Veiculo {
         this.status = status;
     }
     
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
 
     public abstract double calcularCustoLocacao(int dias);
     
@@ -65,6 +75,7 @@ public abstract class Veiculo {
                 "\n Placa= " + placa +
                 "\n Modelo= " + modelo + 
                 "\n Ano= " + ano +
-                "\n Status= " + status ;
+                "\n Status= " + status +
+                "\n tipo= "+ tipo;
     }
 }
