@@ -43,6 +43,13 @@ public class Usuario {
         this.perfil = perfil;
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Usuario usuario = (Usuario) obj;
+        return nomeUsuario.equals(usuario.nomeUsuario);  
+    }
+    
  
     public String toString() {
         return "\nLogin: " +

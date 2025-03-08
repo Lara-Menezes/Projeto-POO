@@ -28,17 +28,21 @@ public abstract class baseDAO<T> implements Persistencia<T> {
     }
     
     public void excluir(T obj) {
-        List<T> lista = listar();
-        lista.remove(obj);
-        escreverArquivo(lista);
+    	List<T> lista = listar();
+        if (lista.remove(obj)) { 
+            escreverArquivo(lista); 
+        }
     }
 
     public List<T> listar(Class<T> clazz) {
         List<T> lista = new ArrayList<>();
         try {
+            // Lê o conteúdo do arquivo e converte para lista de objetos
             String json = new String(Files.readAllBytes(Paths.get(fileName)));
-            Type listType = TypeToken.getParameterized(ArrayList.class, clazz).getType();
-            lista = new Gson().fromJson(json, listType);
+            if (!json.trim().isEmpty()) {  // Verifica se o JSON não está vazio
+                Type listType = TypeToken.getParameterized(ArrayList.class, clazz).getType();
+                lista = new Gson().fromJson(json, listType);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

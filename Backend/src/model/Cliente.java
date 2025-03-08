@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Cliente {
 	
 	private String nome;
@@ -32,6 +34,18 @@ public class Cliente {
 
     public String getEmail() {
         return email;
+    }
+    
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return cpf.equals(cliente.cpf);  // Comparar pelo CPF
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf);  // Gerar hash baseado no CPF
     }
 
 

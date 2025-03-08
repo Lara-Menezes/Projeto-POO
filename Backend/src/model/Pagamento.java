@@ -1,19 +1,17 @@
 package model;
 
-import java.time.LocalDate;
-
 public class Pagamento {
     private int idPagamento;
     private int idLocacao;
     private double valorPago;
-    private LocalDate dataPagamento;
+    private String dataPagamento;
     private String tipoPagamento; 
     
     public Pagamento() {
     	
     }
 
-    public Pagamento(int idPagamento, int idLocacao, double valorPago, LocalDate dataPagamento, String tipoPagamento) {
+    public Pagamento(int idPagamento, int idLocacao, double valorPago, String dataPagamento, String tipoPagamento) {
         this.idPagamento = idPagamento;
         this.idLocacao = idLocacao;
         this.valorPago = valorPago;
@@ -44,15 +42,18 @@ public class Pagamento {
     }
 
     public void setValorPago(double valorPago) {
+    	if (valorPago < 0) {
+            throw new IllegalArgumentException("O valor pago não pode ser negativo.");
+        }
         this.valorPago = valorPago;
     }
     
 
-    public LocalDate getDataPagamento() {
+    public String getDataPagamento() {
         return dataPagamento;
     }
 
-    public void setDataPagamento(LocalDate dataPagamento) {
+    public void setDataPagamento(String dataPagamento) {
         this.dataPagamento = dataPagamento;
     }
     
@@ -72,7 +73,7 @@ public class Pagamento {
                 "\n ID da Locação= " + idLocacao +
                 "\n Valor Pago= " + valorPago +
                 "\n Data do pagamento= " + dataPagamento +
-                "\n Método do pagamento= " + tipoPagamento;
+                "\n Método de pagamento= " + tipoPagamento;
     }
 }
 

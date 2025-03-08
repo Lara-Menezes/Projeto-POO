@@ -57,4 +57,26 @@ public class VeiculoController {
             return "Veículo não encontrado!";
         }
     }
+    public void exibirVeiculosLocados() {
+        List<Veiculo> veiculosLocados = veiculoDAO.listarLocados();
+        if (veiculosLocados.isEmpty()) {
+            System.out.println("Nenhum veículo locado.");
+        } else {
+            for (Veiculo veiculo : veiculosLocados) {
+                System.out.println(veiculo.getTipo() + " - " +veiculo.getPlaca() + " - " + veiculo.getModelo() + " - " + veiculo.getStatus());
+            }
+        }
+    }
+
+    // Método para exibir os veículos disponíveis
+    public void exibirVeiculosDisponiveis() {
+        List<Veiculo> veiculosDisponiveis = veiculoDAO.listarDisponiveis();
+        if (veiculosDisponiveis.isEmpty()) {
+            System.out.println("Nenhum veículo disponível.");
+        } else {
+            for (Veiculo veiculo : veiculosDisponiveis) {
+                System.out.println(veiculo.getTipo() + " - " + veiculo.getPlaca() + " - " + veiculo.getModelo() + " - " + veiculo.getStatus());
+            }
+        }
+    }
 }
