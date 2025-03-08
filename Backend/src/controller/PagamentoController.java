@@ -3,6 +3,7 @@ package controller;
 import dao.PagamentoDAO;
 import dao.LocacaoDAO;
 import model.Pagamento;
+import utils.RelatorioPDF2;
 import model.Locacao;
 import model.Cliente;
 
@@ -67,5 +68,16 @@ public class PagamentoController {
                 exibirHistoricoPagamentos(locacao); 
             }
         }
+    }
+    
+    public void gerarRelatorioFaturamento() {
+        // Recuperando os pagamentos para gerar o relatório
+        List<Pagamento> pagamentos = listarPagamentos();
+
+        // Criando uma instância de RelatorioPDF2 para gerar o relatório
+        RelatorioPDF2 relatorioPDF = new RelatorioPDF2();
+
+        // Gerando o relatório de faturamento mensal com os dados de pagamentos
+        relatorioPDF.gerarRelatorioFaturamento(pagamentos, "seuDiretório/relatorio_faturamento.pdf");
     }
 }

@@ -5,6 +5,7 @@ import dao.LocacaoDAO;
 import model.Cliente;
 import model.Locacao;
 import model.Veiculo;
+import utils.RelatorioPDF2;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -64,5 +65,21 @@ public class LocacaoController {
             System.out.println("Cliente não encontrado!");
             return null;
         }
+    }
+    
+    public void gerarRelatorioVeiculosLocados(List<Locacao> locacoes) {
+        // Criando uma instância de RelatorioPDF2 para gerar o relatório
+        RelatorioPDF2 relatorioPDF = new RelatorioPDF2();
+
+        // Gerando o relatório de veículos locados no mês com as locações
+        relatorioPDF.gerarRelatorioVeiculosLocados(locacoes, "seuDiretório/relatorio_veiculos_locados.pdf");
+    }
+    
+    public void gerarRelatorioClientesLocacoes(List<Locacao> locacoes) {
+        // Criando uma instância de RelatorioPDF2 para gerar o relatório
+        RelatorioPDF2 relatorioPDF = new RelatorioPDF2();
+
+        // Gerando o relatório de clientes e suas locações
+        relatorioPDF.gerarRelatorioClientesLocacoes(locacoes, "seuDiretório/relatorio_clientes_locacoes.pdf");
     }
 }
