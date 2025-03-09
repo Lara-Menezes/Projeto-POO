@@ -6,6 +6,7 @@
  */
 module Backend {
 	requires com.google.gson;
+	requires java.desktop;
 	exports model;
 	
 	requires kernel;
