@@ -27,16 +27,18 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
     private static VeiculoDAO instance;
 
     public VeiculoDAO() {
-        super("src/data/veiculos.json", Veiculo.class);
+        super("data/veiculos.json", Veiculo.class);
     }
 
+    //Apenas uma instância de uma classe existe - padrão Singleton
     public static VeiculoDAO getInstance() {
         if (instance == null) {
             instance = new VeiculoDAO();
         }
         return instance;
     }
-
+    
+    //Salva o veiculo
     public void salvar(Veiculo veiculo) {
         List<Veiculo> veiculos = listar();
         
@@ -50,6 +52,7 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
         super.salvar(veiculo);
     }
     
+    //Atualiza o veiculo
     public void atualizar(Veiculo veiculo) {
         List<Veiculo> veiculos = listar();  
 
@@ -58,14 +61,27 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
             if (v.getPlaca().equals(veiculo.getPlaca())) {
                 veiculos.set(i, veiculo);  
                 escreverArquivo(veiculos);  
-                System.out.println("Veículo atualizado com sucesso.");
                 return;
             }
         }
-
-        System.out.println("Veículo não encontrado para atualização.");
     }
     
+    
+  //Exclui o veículo
+    public boolean removerVeiculo(String placa) {
+        List<Veiculo> veiculos = listar(); 
+        
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo.getPlaca().equals(placa)) {
+            	excluir(veiculo);
+            	return true;  
+            }
+        }
+        return false;  
+    }
+    
+    
+    //Busca o veiculo pela Placa
     public Veiculo buscarPorPlaca(String placa) {
         List<Veiculo> veiculos = listar();
         
@@ -77,6 +93,20 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
         return null;
     }
     
+    //busca o veiculo pelo modelo
+    public Veiculo buscarPorModelo(String modelo) {
+        List<Veiculo> veiculos = listar();
+        
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo.getModelo().equals(modelo)) {
+                return veiculo;
+            }
+        }
+        return null;
+    }
+    
+    
+    //lista os objetos com um desserialize customizado para evitar erro de instanciação de classe abstrata
     public List<Veiculo> listar(Class<Veiculo> clazz) {
         List<Veiculo> lista = new ArrayList<>();
         try {
@@ -91,12 +121,12 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
                         if (jsonObject.has("tipo") && !jsonObject.get("tipo").isJsonNull()) {
                             String tipo = jsonObject.get("tipo").getAsString();  
                             
-                            switch (tipo) {
+                            switch (tipo.toLowerCase()) {
                                 case "carro":
                                     return context.deserialize(json, Carro.class);
                                 case "moto":
                                     return context.deserialize(json, Moto.class);
-                                case "caminhao":
+                                case "caminhão":
                                     return context.deserialize(json, Caminhao.class);
                                 default:
                                     throw new JsonParseException("Tipo de veículo desconhecido: " + tipo);
@@ -120,12 +150,13 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
         return lista;
     }
     
+    //lista os veiculos locados
     public List<Veiculo> listarLocados() {
         List<Veiculo> veiculosLocados = new ArrayList<>();
         List<Veiculo> veiculos = listar(Veiculo.class);  // Lista todos os veículos
 
         for (Veiculo veiculo : veiculos) {
-            if ("Alugado".equals(veiculo.getStatus())) {
+            if ("Locado".equals(veiculo.getStatus())) {
                 veiculosLocados.add(veiculo);
             }
         }
@@ -133,6 +164,7 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
         return veiculosLocados;
     }
     
+    //lista os veiculos disponíveis
     public List<Veiculo> listarDisponiveis() {
         List<Veiculo> veiculosDisponiveis = new ArrayList<>();
         List<Veiculo> veiculos = listar(Veiculo.class);  // Lista todos os veículos
@@ -146,4 +178,6 @@ public class VeiculoDAO extends baseDAO<Veiculo> {
         return veiculosDisponiveis;
     }
     }
+
+
 

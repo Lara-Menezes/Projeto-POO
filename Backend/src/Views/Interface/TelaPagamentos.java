@@ -1,40 +1,53 @@
-package view;
+package Views.Interface;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import controller.PagamentoController;
+import model.Pagamento;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.awt.event.ActionEvent;
 
-public class TelaPagamentos extends JFrame {
-    private JTextField txtIdPagamento;
+public class TelaPagamentos extends JFrame{
+
+    private JFrame frmPagamentos;
     private JTextField txtIdLocacao;
     private JTextField txtValorPago;
     private JTextField txtDataPagamento;
     private JComboBox<String> cbMetodoPagamento;
     private JButton btnRegistrar;
     private JTable tabelaPagamentos;
+    private PagamentoController pagamentoController;
+    private JButton btnAtualizar;
 
     public TelaPagamentos() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(TelaPagamentos.class.getResource("/Images/veiculo.png")));
-        getContentPane().setBackground(new Color(255, 255, 0));
-        setTitle("REGISTRO DE PAGAMENTOS");
-        setSize(600, 646);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        this.pagamentoController = new PagamentoController();
+        initialize();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            TelaPagamentos telaPagamentos = new TelaPagamentos();
+            PagamentoController pagamentoController = new PagamentoController();
+            pagamentoController.setPagamentoController(telaPagamentos);
+            telaPagamentos.exibirTela();
+        });
+    }
+
+    private void initialize() {
+        frmPagamentos = new JFrame();
+        frmPagamentos.setIconImage(Toolkit.getDefaultToolkit().getImage(TelaPagamentos.class.getResource("/Views/Images/veiculo.png")));
+        frmPagamentos.getContentPane().setBackground(new Color(255, 255, 0));
+        frmPagamentos.setTitle("REGISTRO DE PAGAMENTOS");
+        frmPagamentos.setSize(600, 646);
+        frmPagamentos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frmPagamentos.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         panel.setBackground(new Color(0, 0, 0));
         panel.setBounds(0, 0, 584, 196);
         panel.setLayout(null);
-
-        JLabel lblIdPagamento = new JLabel("ID Pagamento:");
-        lblIdPagamento.setForeground(Color.WHITE);
-        lblIdPagamento.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblIdPagamento.setBounds(20, 11, 208, 20);
-        txtIdPagamento = new JTextField();
-        txtIdPagamento.setBounds(312, 11, 236, 20);
-        panel.add(lblIdPagamento);
-        panel.add(txtIdPagamento);
 
         JLabel lblIdLocacao = new JLabel("ID Locação:");
         lblIdLocacao.setForeground(Color.WHITE);
@@ -72,26 +85,79 @@ public class TelaPagamentos extends JFrame {
         panel.add(lblMetodoPagamento);
         panel.add(cbMetodoPagamento);
 
-        btnRegistrar = new JButton("Registrar Pagamento");
-        btnRegistrar.setBackground(new Color(255, 255, 0));
-        btnRegistrar.setFont(new Font("Tahoma", Font.BOLD, 13));
+        // Criação do botão de registrar pagamento
+        btnRegistrar = new JButton("Registrar ");
+        configurarBotao(btnRegistrar, Color.BLACK, Color.WHITE, 118, e -> {
+            if (pagamentoController != null) {
+                pagamentoController.registrarPagamento(); // Chama o método para registrar a locação no controlador
+            }
+        });
 
-        tabelaPagamentos = new JTable(new DefaultTableModel(new Object[]{"ID", "ID Locação", "Valor", "Data", "Método"}, 0));
-        JScrollPane scrollPane = new JScrollPane(tabelaPagamentos);
-        scrollPane.setBounds(0, 203, 584, 344);
-
+        // Painel para o botão
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBounds(0, 547, 584, 49);
         buttonPanel.setLayout(null);
         buttonPanel.add(btnRegistrar);
-        getContentPane().setLayout(null);
 
-        getContentPane().add(panel);
-        getContentPane().add(scrollPane);
-        getContentPane().add(buttonPanel);
+        // Criação da tabela para exibir os pagamentos registrados
+        tabelaPagamentos = new JTable(new DefaultTableModel(new Object[]{"ID", "ID Locação", "Valor", "Data", "Método"}, 0));
+        JScrollPane scrollPane = new JScrollPane(tabelaPagamentos);
+        scrollPane.setBounds(0, 203, 584, 344);
+
+        btnAtualizar = new JButton("Atualizar Lista");
+        btnAtualizar.setBounds(0, 715, 584, 23);
+        btnAtualizar.addActionListener(e -> atualizarTabela());
+
+        frmPagamentos.getContentPane().setLayout(null);
+        frmPagamentos.getContentPane().add(panel);
+        frmPagamentos.getContentPane().add(scrollPane);
+        frmPagamentos.getContentPane().add(buttonPanel);
+        
+                // Configuração do botão "Voltar"
+                JButton btnVoltar = new JButton("Voltar");
+                btnVoltar.setBounds(320, 10, 151, 30);
+                buttonPanel.add(btnVoltar);
+                btnVoltar.addActionListener(e -> {
+                    TelaIntermedioAtendente telainter = new TelaIntermedioAtendente();
+                    telainter.setVisible();
+                    frmPagamentos.dispose();
+                });
+                btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 13));
+                btnVoltar.setBackground(Color.RED);
+        frmPagamentos.getContentPane().add(btnAtualizar);
+
+        atualizarTabela();
     }
 
-    // Métodos getters para o controller acessar os componentes corretamente
+    // Método de configuração para o botão
+    private void configurarBotao(JButton botao, Color corFundo, Color corTexto, int largura, ActionListener acao) {
+        botao.setBackground(corFundo);
+        botao.setForeground(corTexto);
+        botao.setFont(new Font("Tahoma", Font.BOLD, 13));
+        botao.setBounds(130, 10, 138, 30);
+        botao.addActionListener(acao);
+    }
+
+    private void atualizarTabela() {
+        List<Pagamento> pagamentos = pagamentoController.listarPagamentos();
+        DefaultTableModel modeloPagamentos = (DefaultTableModel) tabelaPagamentos.getModel();
+        modeloPagamentos.setRowCount(0);
+
+        for (Pagamento pagamento : pagamentos) {
+            modeloPagamentos.addRow(new Object[]{
+                    pagamento.getIdPagamento(),
+                    pagamento.getIdLocacao(),
+                    pagamento.getValorPago(),
+                    pagamento.getDataPagamento(),
+                    pagamento.getTipoPagamento()
+            });
+        }
+    }
+
+    public void exibirTela() {
+        frmPagamentos.setVisible(true);
+    }
+
     public JTextField getTxtIdLocacao() {
         return txtIdLocacao;
     }
@@ -116,6 +182,20 @@ public class TelaPagamentos extends JFrame {
         return tabelaPagamentos;
     }
 
+    public JFrame getFrmPagamentos() {
+        return frmPagamentos;
+    }
+
+    public void setPagamentoController(PagamentoController pagamentoController) {
+        this.pagamentoController = pagamentoController;
+    }
+
+    public void preencherCamposLocacao(String idLocacao, String valorLocacao, String dataLocacao) {
+        txtIdLocacao.setText(idLocacao);
+        txtValorPago.setText(valorLocacao);
+        txtDataPagamento.setText(dataLocacao);
+    }
+
     public void limparCampos() {
         txtIdLocacao.setText("");
         txtValorPago.setText("");
@@ -125,9 +205,5 @@ public class TelaPagamentos extends JFrame {
 
     public void addRegistrarPagamentoListener(ActionListener listener) {
         btnRegistrar.addActionListener(listener);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TelaPagamentos().setVisible(true));
     }
 }

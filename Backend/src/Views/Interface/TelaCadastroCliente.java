@@ -1,10 +1,13 @@
-package view;
+package Views.Interface;
 
 import javax.swing.*;
 import controller.ClienteController;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class TelaCadastroCliente extends JFrame {
+public class TelaCadastroCliente extends JFrame{
+    private JFrame frmCadastroDeClientes;
     private JTextField txtNome;
     private JButton btnCadastrar;
     private JTextField textField;
@@ -12,22 +15,30 @@ public class TelaCadastroCliente extends JFrame {
     private JTextField textField_2;
     private JButton btnEditar;
     private JButton btnExcluir;
+    private JButton btnVoltar;
+    private ClienteController clienteController; 
 
+    // Construtor da classe que inicializa a interface gráfica
     public TelaCadastroCliente() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(TelaCadastroCliente.class.getResource("/Images/veiculo.png")));
-        setTitle("CADASTRO DE CLIENTES");
-        setSize(480, 400);  // Ajustado para tamanho mais apropriado
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        initialize();
+        clienteController = new ClienteController(); // Cria uma instância do controlador
+        clienteController.setTelaCadastroCliente(this); // Associa o controlador à tela
+    }
 
-        // Layout para os componentes principais
-        setLayout(new BorderLayout());
+    // Método que inicializa os componentes da interface gráfica
+    private void initialize() {
+        frmCadastroDeClientes = new JFrame(); 
+        frmCadastroDeClientes.setIconImage(Toolkit.getDefaultToolkit().getImage(TelaCadastroCliente.class.getResource("/Views/Images/veiculo.png")));
+        frmCadastroDeClientes.setTitle("CADASTRO DE CLIENTES");
+        frmCadastroDeClientes.setSize(594, 484);
+        frmCadastroDeClientes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frmCadastroDeClientes.setLocationRelativeTo(null);
+        frmCadastroDeClientes.getContentPane().setLayout(new BorderLayout());
 
-        // Painel de Campos
-        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));  // Ajustando para GridLayout
+        // Painel de Campos para cadastro do cliente
+        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Criando os componentes
         JLabel lblNome = new JLabel("Nome:");
         lblNome.setFont(new Font("Tahoma", Font.BOLD, 13));
         txtNome = new JTextField();
@@ -44,7 +55,7 @@ public class TelaCadastroCliente extends JFrame {
         lblEmail.setFont(new Font("Tahoma", Font.BOLD, 13));
         textField_2 = new JTextField();
 
-        // Adicionando os componentes ao painel
+        // Adiciona os componentes ao painel
         panel.add(lblNome);
         panel.add(txtNome);
         panel.add(lblCpf);
@@ -55,9 +66,10 @@ public class TelaCadastroCliente extends JFrame {
         panel.add(textField_2);
 
         // Painel de Botões
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));  // Usando FlowLayout para alinhamento centralizado
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(new Color(255, 255, 0));
 
+        // Botões
         btnCadastrar = new JButton("Cadastrar");
         btnCadastrar.setFont(new Font("Tahoma", Font.BOLD, 13));
         btnCadastrar.setForeground(Color.WHITE);
@@ -71,18 +83,36 @@ public class TelaCadastroCliente extends JFrame {
         btnExcluir = new JButton("Excluir");
         btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 13));
         btnExcluir.setForeground(Color.WHITE);
-        btnExcluir.setBackground(new Color(255, 0, 0));
+        btnExcluir.setBackground(new Color(0, 0, 0));
 
-        // Adicionando os botões ao painel de botões
+        // Adiciona os botões no painel de botões
         buttonPanel.add(btnCadastrar);
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnExcluir);
 
-        // Adicionando os painéis à janela
-        add(panel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
+        // Adiciona o painel de campos e o painel de botões na janela
+        frmCadastroDeClientes.getContentPane().add(panel, BorderLayout.CENTER);
+        frmCadastroDeClientes.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+        // Criação do botão Voltar e sua funcionalidade
+        btnVoltar = new JButton("Voltar");
+        btnVoltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                TelaIntermedioGerente telainter = new TelaIntermedioGerente(); // Cria a tela de gerenciamento
+                telainter.setVisible(true); 
+                frmCadastroDeClientes.dispose(); // Fecha a tela atual
+            }
+        });
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnVoltar.setBackground(Color.RED);
+        buttonPanel.add(btnVoltar);
+
+        // Torna a janela visível
+        frmCadastroDeClientes.setVisible(true);
     }
 
+    // Métodos getters para acessar os campos e botões
     public JTextField getTxtNome() {
         return txtNome;
     }
@@ -111,11 +141,21 @@ public class TelaCadastroCliente extends JFrame {
         return btnExcluir;
     }
 
+    public JFrame getFrmCadastroDeClientes() {
+        return frmCadastroDeClientes;
+    }
+
+    // Método para exibir a tela de cadastro
+    public void exibirTela() {
+        frmCadastroDeClientes.setVisible(true);
+    }
+
+    // Método main para inicializar a tela de cadastro
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            TelaCadastroCliente telaCadastro = new TelaCadastroCliente();
-            ClienteController controller = new ClienteController(telaCadastro);
-            telaCadastro.setVisible(true);
+            TelaCadastroCliente telaCadastro = new TelaCadastroCliente(); // Cria uma instância da tela
+            // O controlador já foi associado dentro do construtor da TelaCadastroCliente
         });
     }
 }
+

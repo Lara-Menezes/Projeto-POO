@@ -8,3 +8,4 @@ public interface Persistencia<T> {
     void excluir(T obj);
     List<T> listar(Class<T> clazz);
 }
+

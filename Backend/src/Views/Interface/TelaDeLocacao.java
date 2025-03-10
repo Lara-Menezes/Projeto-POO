@@ -1,155 +1,155 @@
-package view;
+package Views.Interface;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import javax.swing.*; 
+import java.awt.*; 
 import java.awt.event.ActionListener;
 import controller.LocacaoController;
 
-public class TelaDeLocacao extends JFrame {
-    private JComboBox<String> cbClientes;
-    private JComboBox<String> cbVeiculos;
-    private JTextField txtDataRetirada;
-    private JTextField txtDataDevolucao;
-    private JTextField txtNumeroDias;
-    private JTextField txtValorTotal;
-    private JButton btnConfirmar;
-    private LocacaoController controller;
+public class TelaDeLocacao extends JFrame{ 
 
-    public TelaDeLocacao() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(TelaDeLocacao.class.getResource("/Images/veiculo.png")));
-        setTitle("REGISTRO DE LOCAÇÃO DE VEÍCULOS");
-        setSize(480, 552);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    private JFrame frmLocacao; 
+    private JComboBox<String> cbClientes; 
+    private JComboBox<String> cbVeiculos; 
+    private JTextField txtDataRetirada; 
+    private JTextField txtDataDevolucao;  
+    private JButton btnConfirmar; 
+    private JButton btnCancelar; 
+    private JButton btnVoltar; 
+    private LocacaoController controller; 
 
-        JPanel panel = new JPanel();
-        panel.setBounds(0, 0, 464, 444);
-        panel.setLayout(null);
-        
-        JLabel lblCliente = new JLabel("Cliente:");
-        lblCliente.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblCliente.setBounds(23, 23, 199, 47);
-        panel.add(lblCliente);
-        
-        cbClientes = new JComboBox<>(new String[]{"Selecione um cliente"});
-        cbClientes.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cbClientes.setBounds(239, 34, 187, 25);
-        panel.add(cbClientes);
-        
-        JLabel lblVeculo = new JLabel("Veículo:");
-        lblVeculo.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblVeculo.setBounds(23, 91, 199, 47);
-        panel.add(lblVeculo);
-        
-        cbVeiculos = new JComboBox<>(new String[]{"Selecione um veículo"});
-        cbVeiculos.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cbVeiculos.setBounds(239, 102, 187, 25);
-        panel.add(cbVeiculos);
-        
-        JLabel lblDataDeRetirada = new JLabel("Data de Retirada:");
-        lblDataDeRetirada.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblDataDeRetirada.setBounds(23, 159, 199, 47);
-        panel.add(lblDataDeRetirada);
-        
-        txtDataRetirada = new JTextField();
-        txtDataRetirada.setBounds(239, 170, 187, 25);
+    // Construtor agora sem o LocacaoController, pois ele será associado depois
+    public TelaDeLocacao() { 
+        frmLocacao = new JFrame(); 
+        frmLocacao.setIconImage(Toolkit.getDefaultToolkit().getImage(TelaDeLocacao.class.getResource("/Views/Images/veiculo.png"))); 
+        frmLocacao.setTitle("REGISTRO DE LOCAÇÃO DE VEÍCULOS"); 
+        frmLocacao.setSize(601, 552); 
+        frmLocacao.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+        frmLocacao.setLocationRelativeTo(null); 
+        frmLocacao.getContentPane().setLayout(null); 
+
+        JPanel panel = new JPanel(); 
+        panel.setBounds(0, 0, 575, 444); 
+        panel.setLayout(null); 
+        frmLocacao.getContentPane().add(panel); 
+
+        adicionarCampos(panel); 
+        adicionarBotoes(); 
+    }
+
+    private void adicionarCampos(JPanel panel) {
+        String[] labels = {"Cliente:", "Veículo:", "Data de Retirada:", "Data de Devolução:"}; 
+        int yPosition = 25;
+
+        for (String label : labels) { 
+            JLabel lbl = new JLabel(label); 
+            lbl.setFont(new Font("Tahoma", Font.BOLD, 13)); 
+            lbl.setBounds(80, yPosition, 199, 25); 
+            panel.add(lbl); 
+            yPosition += 50; 
+        }
+
+        cbClientes = new JComboBox<>(new String[]{"Selecione um cliente"}); 
+        cbClientes.setBounds(296, 36, 187, 25); 
+        panel.add(cbClientes); 
+
+        cbVeiculos = new JComboBox<>(new String[]{"Selecione um veículo"}); 
+        cbVeiculos.setBounds(296, 86, 187, 25); 
+        panel.add(cbVeiculos); 
+
+        txtDataRetirada = new JTextField(); 
+        txtDataRetirada.setBounds(296, 136, 187, 25); 
         panel.add(txtDataRetirada);
-        
-        JLabel lblDataDeDevolucao = new JLabel("Data de Devolução:");
-        lblDataDeDevolucao.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblDataDeDevolucao.setBounds(23, 233, 199, 47);
-        panel.add(lblDataDeDevolucao);
-        
-        txtDataDevolucao = new JTextField();
-        txtDataDevolucao.setBounds(239, 244, 187, 25);
+
+        txtDataDevolucao = new JTextField(); 
+        txtDataDevolucao.setBounds(296, 186, 187, 25); 
         panel.add(txtDataDevolucao);
-        
-        JLabel lblNumeroDeDias = new JLabel("Número de Dias:");
-        lblNumeroDeDias.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblNumeroDeDias.setBounds(23, 302, 199, 47);
-        panel.add(lblNumeroDeDias);
-        
-        txtNumeroDias = new JTextField();
-        txtNumeroDias.setBounds(239, 313, 187, 25);
-        panel.add(txtNumeroDias);
-        
-        JLabel lblValorTotal = new JLabel("Valor Total:");
-        lblValorTotal.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblValorTotal.setBounds(23, 361, 199, 47);
-        panel.add(lblValorTotal);
-        
-        txtValorTotal = new JTextField();
-        txtValorTotal.setBounds(239, 374, 187, 25);
-        txtValorTotal.setEditable(false);
-        panel.add(txtValorTotal);
-        
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(255, 255, 0));
-        buttonPanel.setBounds(0, 455, 464, 58);
-        buttonPanel.setLayout(null);
-        
+    }
+
+    private void adicionarBotoes() {
+        JPanel buttonPanel = new JPanel(); 
+        buttonPanel.setBackground(new Color(255, 255, 0)); 
+        buttonPanel.setBounds(0, 455, 585, 58); 
+        buttonPanel.setLayout(null); 
+        frmLocacao.getContentPane().add(buttonPanel); 
+
         btnConfirmar = new JButton("Confirmar");
-        btnConfirmar.setForeground(Color.WHITE);
-        btnConfirmar.setBackground(Color.BLACK);
-        btnConfirmar.setFont(new Font("Tahoma", Font.BOLD, 13));
-        btnConfirmar.setBounds(118, 11, 98, 36);
-        btnConfirmar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (controller != null) {
-                    controller.registrarLocacao();
-                }
+        configurarBotao(btnConfirmar, Color.BLACK, Color.WHITE, 118, e -> {
+            if (controller != null) { 
+                controller.registrarLocacao(); // Chama o método para registrar a locação no controlador
             }
         });
         buttonPanel.add(btnConfirmar);
-        
-        JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setForeground(Color.WHITE);
-        btnCancelar.setBackground(Color.BLACK);
-        btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 13));
-        btnCancelar.setBounds(236, 11, 98, 36);
+
+        btnCancelar = new JButton("Cancelar");
+        configurarBotao(btnCancelar, Color.BLACK, Color.WHITE, 236, e -> frmLocacao.dispose()); 
         buttonPanel.add(btnCancelar);
-        
-        getContentPane().setLayout(null);
-        getContentPane().add(panel);
-        getContentPane().add(buttonPanel);
+
+        btnVoltar = new JButton("VOLTAR");
+        configurarBotao(btnVoltar, Color.RED, Color.WHITE, 356, e -> {
+            TelaIntermedioAtendente telaInter = new TelaIntermedioAtendente(); 
+            telaInter.setVisible(); 
+            frmLocacao.dispose(); 
+        });
+        buttonPanel.add(btnVoltar);
     }
 
-    public void setController(LocacaoController controller) {
-        this.controller = controller;
+    private void configurarBotao(JButton botao, Color fundo, Color texto, int x, ActionListener acao) { 
+        botao.setForeground(texto); 
+        botao.setBackground(fundo); 
+        botao.setFont(new Font("Tahoma", Font.BOLD, 13)); 
+        botao.setBounds(x, 11, 98, 36); 
+        botao.addActionListener(acao); 
     }
-    
+
     public JComboBox<String> getCbClientes() {
         return cbClientes;
     }
-    
+
     public JComboBox<String> getCbVeiculos() {
         return cbVeiculos;
     }
-    
+
     public JTextField getTxtDataRetirada() {
         return txtDataRetirada;
     }
-    
+
     public JTextField getTxtDataDevolucao() {
         return txtDataDevolucao;
     }
-    
-    public JTextField getTxtNumeroDias() {
-        return txtNumeroDias;
+
+
+    public JButton getBtnConfirmar() {
+        return btnConfirmar;
     }
-    
-    public JTextField getTxtValorTotal() {
-        return txtValorTotal;
+
+    public JButton getBtnCancelar() {
+        return btnCancelar;
     }
-    
+
+    public JButton getBtnVoltar() {
+        return btnVoltar;
+    }
+
+    public JFrame getFrmLocacao() {
+        return frmLocacao;
+    }
+
+    public void exibirTela() {
+        frmLocacao.setVisible(true); 
+    }
+
+    // Método que vai associar o controlador à tela
+    public void setController(LocacaoController controller) {
+        this.controller = controller;
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                TelaDeLocacao tela = new TelaDeLocacao();
-                LocacaoController controller = new LocacaoController(tela);
-                tela.setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            TelaDeLocacao tela = new TelaDeLocacao(); 
+            LocacaoController controller = new LocacaoController(); // Cria o controlador
+            tela.setController(controller); // Associa o controlador à tela
+            controller.setTelaDeLocacao(tela); // Associa a tela ao controlador
+            tela.exibirTela(); // Exibe a tela de locação
         });
     }
 }

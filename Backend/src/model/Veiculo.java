@@ -2,16 +2,17 @@ package model;
 
 public abstract class Veiculo {
 	
-    private String placa;
-    private String modelo;
-    private int ano;
-    private String status; 
-    private String tipo;
+    protected String placa;
+    protected String modelo;
+    protected int ano;
+    protected String status; 
+    protected String tipo;
 
+    
+    //Construtor limpo para serialização e desserialização do json
     public Veiculo() {
     	
     }
-    
     
     public Veiculo(String tipo, String placa, String modelo, int ano, String status) {
         this.placa = placa;
@@ -22,6 +23,7 @@ public abstract class Veiculo {
     }
 
 
+    //Getters e setters
     public String getPlaca() {
         return placa;
     }
@@ -66,10 +68,11 @@ public abstract class Veiculo {
     }
     
 
+    //método abstrato que será utilizado pelas classes carro, moto e caminhão
     public abstract double calcularCustoLocacao(int dias);
     
     
-
+    //Para exibir as informações do objeto
     public String toString() {
         return "\nVeículo: " +
                 "\n Placa= " + placa +

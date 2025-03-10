@@ -1,122 +1,136 @@
-package view;
+package Views.Interface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import controller.LocacaoController; // Importando o controlador
 
-public class TelaDevolucao extends JFrame {
+public class TelaDevolucao extends JFrame{
+
+    private JFrame frmDevolucao;
     private JTextField txtIdLocacao;
-    private JTextField txtDataPrevista;
     private JTextField txtDataDevolucao;
-    private JTextField txtValorBase;
-    private JTextField txtMulta;
-    private JTextField txtValorTotal;
-    private JComboBox<String> cbMetodoPagamento;
-    private JButton btnCalcular;
-    private JButton btnRegistrarPagamento;
+    private JButton btnSalvar;
+    private JButton btnVoltar;
+    private LocacaoController controller; // Controlador para gerenciar a lógica
 
+    // Construtor da tela, inicializa os componentes gráficos
     public TelaDevolucao() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(TelaDevolucao.class.getResource("/Images/veiculo.png")));
-        getContentPane().setBackground(new Color(255, 255, 0));
-        setTitle("DEVOLUÇÃO DE VEÍCULOS");
-        setSize(600, 488);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        frmDevolucao = new JFrame();
+        frmDevolucao.setIconImage(Toolkit.getDefaultToolkit().getImage(TelaDevolucao.class.getResource("/Views/Images/veiculo.png")));
+        frmDevolucao.setTitle("DEVOLUÇÃO DE VEÍCULOS");
+        frmDevolucao.setSize(600, 545);
+        frmDevolucao.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frmDevolucao.setLocationRelativeTo(null);
+        frmDevolucao.getContentPane().setLayout(null);
 
-        // Painel principal (fundo preto)
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(0, 0, 0));
-        panel.setBounds(10, 21, 564, 326);
+        panel.setBounds(0, 0, 575, 444);
         panel.setLayout(null);
+        frmDevolucao.getContentPane().add(panel);
 
-        // Campos de entrada
-        JLabel lblIdLocacao = new JLabel("ID Locação:");
-        lblIdLocacao.setForeground(Color.WHITE);
-        lblIdLocacao.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblIdLocacao.setBounds(20, 11, 208, 20);
+        adicionarCampos(panel);
+        adicionarBotoes();
+    }
+
+    private void adicionarCampos(JPanel panel) {
+        String[] labels = {"ID Locação:", "Data Devolução:"};
+        int yPosition = 25;
+
+        // Adiciona os labels e campos de entrada
+        for (String label : labels) {
+            JLabel lbl = new JLabel(label);
+            lbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+            lbl.setBounds(80, yPosition, 199, 25);
+            panel.add(lbl);
+            yPosition += 50;
+        }
+
         txtIdLocacao = new JTextField();
-        txtIdLocacao.setBounds(312, 11, 236, 20);
-        panel.add(lblIdLocacao);
+        txtIdLocacao.setBounds(296, 36, 187, 25);
         panel.add(txtIdLocacao);
 
-        JLabel lblDataPrevista = new JLabel("Data Prevista:");
-        lblDataPrevista.setForeground(Color.WHITE);
-        lblDataPrevista.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblDataPrevista.setBounds(20, 42, 208, 20);
-        txtDataPrevista = new JTextField();
-        txtDataPrevista.setBounds(312, 42, 236, 20);
-        panel.add(lblDataPrevista);
-        panel.add(txtDataPrevista);
-
-        JLabel lblDataDevolucao = new JLabel("Data Devolução:");
-        lblDataDevolucao.setForeground(Color.WHITE);
-        lblDataDevolucao.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblDataDevolucao.setBounds(20, 75, 208, 20);
         txtDataDevolucao = new JTextField();
-        txtDataDevolucao.setBounds(312, 75, 236, 20);
-        panel.add(lblDataDevolucao);
+        txtDataDevolucao.setBounds(296, 86, 187, 25);
         panel.add(txtDataDevolucao);
+    }
 
-        JLabel lblValorBase = new JLabel("Valor Base:");
-        lblValorBase.setForeground(Color.WHITE);
-        lblValorBase.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblValorBase.setBounds(20, 108, 208, 20);
-        txtValorBase = new JTextField();
-        txtValorBase.setBounds(312, 108, 236, 20);
-        panel.add(lblValorBase);
-        panel.add(txtValorBase);
-
-        JLabel lblMulta = new JLabel("Multa por Atraso:");
-        lblMulta.setForeground(Color.WHITE);
-        lblMulta.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblMulta.setBounds(20, 139, 208, 20);
-        txtMulta = new JTextField();
-        txtMulta.setBounds(312, 139, 236, 20);
-        panel.add(lblMulta);
-        panel.add(txtMulta);
-
-        JLabel lblValorTotal = new JLabel("Valor Total:");
-        lblValorTotal.setForeground(Color.WHITE);
-        lblValorTotal.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblValorTotal.setBounds(20, 170, 208, 20);
-        txtValorTotal = new JTextField();
-        txtValorTotal.setBounds(312, 170, 236, 20);
-        panel.add(lblValorTotal);
-        panel.add(txtValorTotal);
-
-        JLabel lblMetodoPagamento = new JLabel("Método de Pagamento:");
-        lblMetodoPagamento.setForeground(Color.WHITE);
-        lblMetodoPagamento.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblMetodoPagamento.setBounds(20, 201, 208, 20);
-        cbMetodoPagamento = new JComboBox<>(new String[]{"Dinheiro", "Cartão de Crédito", "Cartão de Débito", "Pix"});
-        cbMetodoPagamento.setBounds(312, 201, 236, 20);
-        panel.add(lblMetodoPagamento);
-        panel.add(cbMetodoPagamento);
-
-        // Botões
-        btnCalcular = new JButton("Calcular Total");
-        btnCalcular.setBackground(new Color(255, 255, 0));
-        btnCalcular.setFont(new Font("Tahoma", Font.BOLD, 13));
-        btnCalcular.setBounds(120, 11, 171, 27);
-
-        btnRegistrarPagamento = new JButton("Registrar Pagamento");
-        btnRegistrarPagamento.setBackground(new Color(255, 255, 0));
-        btnRegistrarPagamento.setFont(new Font("Tahoma", Font.BOLD, 13));
-        btnRegistrarPagamento.setBounds(301, 11, 171, 27);
-
-        // Painel de botões
+    private void adicionarBotoes() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBounds(0, 388, 584, 49);
+        buttonPanel.setBackground(new Color(255, 255, 0));
+        buttonPanel.setBounds(0, 455, 585, 58);
         buttonPanel.setLayout(null);
-        buttonPanel.add(btnCalcular);
-        buttonPanel.add(btnRegistrarPagamento);
+        frmDevolucao.getContentPane().add(buttonPanel);
 
-        // Adicionando os componentes na tela
-        getContentPane().setLayout(null);
-        getContentPane().add(panel);
-        getContentPane().add(buttonPanel);
+        btnSalvar = new JButton("Registrar Pagamento");
+        configurarBotao(btnSalvar, Color.BLACK, Color.WHITE, 118, e -> {
+            if (controller != null) {
+                controller.devolverVeiculo(); // Chama o método do controlador para salvar a devolução
+            }
+        });
+        buttonPanel.add(btnSalvar);
+
+        btnVoltar = new JButton("VOLTAR");
+        configurarBotao(btnVoltar, Color.RED, Color.WHITE, 356, e -> {
+            TelaIntermedioAtendente telaInter = new TelaIntermedioAtendente();
+            telaInter.setVisible();
+            frmDevolucao.dispose();
+        });
+        buttonPanel.add(btnVoltar);
+    }
+
+    private void configurarBotao(JButton botao, Color fundo, Color texto, int x, ActionListener acao) {
+        botao.setForeground(texto);
+        botao.setBackground(fundo);
+        botao.setFont(new Font("Tahoma", Font.BOLD, 13));
+        botao.setBounds(x, 11, 150, 36); // Ajuste no tamanho do botão
+        botao.addActionListener(acao);
+    }
+
+    // Métodos de acesso aos campos de texto
+    public JTextField getTxtIdLocacao() {
+        return txtIdLocacao;
+    }
+
+    public JTextField getTxtDataDevolucao() {
+        return txtDataDevolucao;
+    }
+
+    public JButton getBtnSalvar() {
+        return btnSalvar;
+    }
+
+    public JButton getBtnVoltar() {
+        return btnVoltar;
+    }
+
+    public JFrame getFrmDevolucao() {
+        return frmDevolucao;
+    }
+
+    public void exibirTela() {
+        frmDevolucao.setVisible(true);
+    }
+
+    // Método que vai associar o controlador à tela
+    public void setController(LocacaoController controller) {
+        this.controller = controller;
+    }
+
+    // Método que preenche os campos com os dados da locação
+    public void preencherCamposLocacao(String idLocacao, String valorLocacao, String dataLocacao) {
+        txtIdLocacao.setText(idLocacao);
+        txtDataDevolucao.setText(dataLocacao);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TelaDevolucao().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            TelaDevolucao tela = new TelaDevolucao();
+            LocacaoController controller = new LocacaoController(); // Criar o controlador
+            tela.setController(controller); // Associar o controlador à tela
+            controller.setTelaDevolucao(tela); // Associar a tela ao controlador
+            tela.exibirTela(); // Exibir a tela de devolução
+        });
     }
 }
+

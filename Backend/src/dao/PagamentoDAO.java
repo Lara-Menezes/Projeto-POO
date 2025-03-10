@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.List;
-
 import model.Pagamento;
 
 public class PagamentoDAO extends baseDAO<Pagamento> {
@@ -9,9 +8,10 @@ public class PagamentoDAO extends baseDAO<Pagamento> {
     private static PagamentoDAO instance;
 
     private PagamentoDAO() {
-        super("src/data/pagamentos.json", Pagamento.class);
+        super("data/pagamentos.json", Pagamento.class);
     }
-
+    
+    //Apenas uma instância de uma classe existe - padrão Singleton
     public static PagamentoDAO getInstance() {
         if (instance == null) {
             instance = new PagamentoDAO();
@@ -19,6 +19,7 @@ public class PagamentoDAO extends baseDAO<Pagamento> {
         return instance;
     }
     
+    //busca o pagamento pelo ID da locação
     public Pagamento buscarPagamentoPorLocacaoId(int idLocacao) {
         List<Pagamento> pagamentos = listar(Pagamento.class);
         for (Pagamento pagamento : pagamentos) {
@@ -26,6 +27,6 @@ public class PagamentoDAO extends baseDAO<Pagamento> {
                 return pagamento;  // Retorna o pagamento associado à locação
             }
         }
-        return null;  // Se não encontrar nenhum pagamento associado à locação
+        return null;  
     }
 }

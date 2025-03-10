@@ -8,9 +8,10 @@ public class UsuarioDAO extends baseDAO<Usuario> {
     private static UsuarioDAO instance;
 
     private UsuarioDAO() {
-        super("src/data/usuarios.json", Usuario.class); 
+        super("data/usuarios.json", Usuario.class); 
     }
-
+    
+    //Apenas uma instância de uma classe existe - padrão Singleton
     public static UsuarioDAO getInstance() {
         if (instance == null) {
             instance = new UsuarioDAO();
@@ -19,10 +20,10 @@ public class UsuarioDAO extends baseDAO<Usuario> {
     }
 
     // Método para autenticação de usuário
-    public Usuario autenticar(String nomeUsuario, String senha) {
+    public Usuario autenticar(String nomeUsuario, String senha, String perfil) {
         List<Usuario> usuarios = listar();
         for (Usuario usuario : usuarios) {
-            if (usuario.getNomeUsuario().equals(nomeUsuario) && usuario.getSenha().equals(senha)) {
+            if (usuario.getNomeUsuario().equals(nomeUsuario) && usuario.getSenha().equals(senha) && usuario.getPerfil().equals(perfil)) {
                 return usuario;
             }
         }

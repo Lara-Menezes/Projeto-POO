@@ -7,6 +7,7 @@ public class Usuario {
     private String perfil; 
     
     
+    //Contrutor limpo para serialização e desserialização do json
     public Usuario() {
     	
     }
@@ -17,6 +18,7 @@ public class Usuario {
         this.perfil = perfil;
     }
 
+    //Getters e setters
     public String getNomeUsuario() {
         return nomeUsuario;
     }
@@ -43,6 +45,7 @@ public class Usuario {
         this.perfil = perfil;
     }
 
+    //Equals para comparação entre objetos
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -50,7 +53,7 @@ public class Usuario {
         return nomeUsuario.equals(usuario.nomeUsuario);  
     }
     
- 
+    //Para exibir as informações do objeto
     public String toString() {
         return "\nLogin: " +
                "\n Usuário='" + nomeUsuario  +

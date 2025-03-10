@@ -1,18 +1,20 @@
-package view;
+package Views.Interface;
 
 import controller.UsuarioController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class TelaCadastroUsers {
+public class TelaCadastroUsers extends JFrame{
 
     private JFrame frmCadastroDeUsurios;
     private JTextField textNome;
     private JPasswordField textSenha;
     private JComboBox<String> comboPerfil;
-    private JButton btnCadastrar;  // Mova o botão "Cadastrar" para uma variável de instância
+    private JButton btnCadastrar;  
+
 
     public TelaCadastroUsers() {
         initialize();
@@ -20,11 +22,12 @@ public class TelaCadastroUsers {
 
     private void initialize() {
         frmCadastroDeUsurios = new JFrame();
-        frmCadastroDeUsurios.setIconImage(Toolkit.getDefaultToolkit().getImage(TelaCadastroUsers.class.getResource("/Images/veiculo.png")));
+        frmCadastroDeUsurios.setIconImage(Toolkit.getDefaultToolkit().getImage(TelaCadastroUsers.class.getResource("/Views/Images/veiculo.png")));
         frmCadastroDeUsurios.setTitle("CADASTRO DE USUÁRIOS");
         frmCadastroDeUsurios.setBounds(100, 100, 400, 300);
         frmCadastroDeUsurios.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frmCadastroDeUsurios.getContentPane().setLayout(null);
+        frmCadastroDeUsurios.setLocationRelativeTo(null);
 
         // Campos de entrada
         JLabel lblNome = new JLabel("Nome do Usuário:");
@@ -65,18 +68,20 @@ public class TelaCadastroUsers {
 
         // Botão voltar
         JButton btnVoltar = new JButton("VOLTAR");
-        btnVoltar.setForeground(new Color(255, 255, 255));
-        btnVoltar.setBackground(new Color(255, 0, 0));
-        btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 13));
-        btnVoltar.setBounds(10, 230, 88, 20);
-        frmCadastroDeUsurios.getContentPane().add(btnVoltar);
-        btnVoltar.addActionListener(e -> frmCadastroDeUsurios.dispose());
+        btnVoltar.addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) {
+                TelaIntermedioAdm telaiadm = new TelaIntermedioAdm(); // Cria uma instância da tela intermediária do administrador
+                // telaiadm.setVisible(true); 
+                frmCadastroDeUsurios.dispose(); // Fecha a janela de cadastro de usuário
+            }
+        });
+        btnVoltar.setForeground(new Color(255, 255, 255)); // Define a cor do texto como branco
+        btnVoltar.setBackground(new Color(255, 0, 0)); // Define a cor de fundo como vermelha
+        btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 13)); // Define a fonte do botão
+        btnVoltar.setBounds(10, 230, 88, 20); // Define a posição e o tamanho do botão "Voltar"
+        frmCadastroDeUsurios.getContentPane().add(btnVoltar); // Adiciona o botão "Voltar" na janela
 
-        // Instanciando o controlador
-        UsuarioController usuarioController = new UsuarioController(this);
-        usuarioController.adicionarListenerAoBotaoCadastrar();
-        
-        frmCadastroDeUsurios.setVisible(true);  // Garanta que a janela seja visível
+        frmCadastroDeUsurios.setVisible(true); 
     }
 
     // Métodos getters para interação com o controller
@@ -96,21 +101,21 @@ public class TelaCadastroUsers {
         return frmCadastroDeUsurios;
     }
 
-    // Defina um método para adicionar o listener de cadastrar
-    public void addCadastrarListener(ActionListener listener) {
-        btnCadastrar.addActionListener(listener);
+    public JButton getBtnCadastrar() {
+        return btnCadastrar;
     }
 
-    // Método main - ponto de entrada da aplicação
+    // Método para tornar a tela visível
+    public void setVisible() {
+        frmCadastroDeUsurios.setVisible(true);
+    }
+
     public static void main(String[] args) {
-        // Inicializa a interface gráfica
-        SwingUtilities.invokeLater(() -> {
-            new TelaCadastroUsers();
-        });
+        // Cria uma instância da tela de cadastro de usuários
+        TelaCadastroUsers telaCadastro = new TelaCadastroUsers();
+        UsuarioController usuarioController = new UsuarioController();
+        usuarioController.setTelaCadastroUsers(telaCadastro);
+        telaCadastro.setVisible();
     }
-
-	public void setVisible(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
 }
+

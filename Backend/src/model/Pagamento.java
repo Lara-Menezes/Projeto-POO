@@ -7,6 +7,8 @@ public class Pagamento {
     private String dataPagamento;
     private String tipoPagamento; 
     
+    
+    //construtor limpo para serialização e desserialização do json
     public Pagamento() {
     	
     }
@@ -19,6 +21,8 @@ public class Pagamento {
         this.tipoPagamento = tipoPagamento;
     }
 
+    
+    //getters e setters
     public int getIdPagamento() {
         return idPagamento;
     }
@@ -43,7 +47,7 @@ public class Pagamento {
 
     public void setValorPago(double valorPago) {
     	if (valorPago < 0) {
-            throw new IllegalArgumentException("O valor pago não pode ser negativo.");
+            throw new IllegalArgumentException("O valor pago não pode ser negativo."); //verifica se o valor é negativo
         }
         this.valorPago = valorPago;
     }
@@ -67,6 +71,7 @@ public class Pagamento {
     }
 
 
+    //Retornar os dados do objeto em String
     public String toString() {
         return "\nPagamento: " +
                 "\n ID do Pagamento= " + idPagamento +

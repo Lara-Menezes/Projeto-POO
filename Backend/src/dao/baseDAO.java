@@ -9,9 +9,10 @@ import java.util.*;
 
 public abstract class baseDAO<T> implements Persistencia<T> {
     
-    protected String fileName;
+    protected String fileName; // onde os dados estão persistindo
     private Class<T> type;
     
+    // Construtor da classe baseDAO, recebe o nome do arquivo e o tipo do objeto
     public baseDAO(String fileName, Class<T> type) {
         this.fileName = fileName;
         this.type = type;
@@ -34,6 +35,7 @@ public abstract class baseDAO<T> implements Persistencia<T> {
         }
     }
 
+    // Método para listar os objetos de um arquivo, utilizando o tipo especificado
     public List<T> listar(Class<T> clazz) {
         List<T> lista = new ArrayList<>();
         try {
@@ -49,6 +51,7 @@ public abstract class baseDAO<T> implements Persistencia<T> {
         return lista;
     }
 
+    // Método para escrever a lista de objetos no arquivo
     protected void escreverArquivo(List<T> lista) {
         try (Writer writer = Files.newBufferedWriter(Paths.get(fileName))) {
             new Gson().toJson(lista, writer);

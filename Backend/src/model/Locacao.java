@@ -14,6 +14,7 @@ public class Locacao {
     private double multaAtraso;
     private String locacaoStatus; 
     
+    //Construtor limpo para serialização e desserialização
     public Locacao() {
     	
     }
@@ -31,6 +32,7 @@ public class Locacao {
         calcularValorTotal();
     }
 
+    //Getters e Stters
     public int getIdLocacao() {
         return idLocacao;
     }
@@ -117,6 +119,8 @@ public class Locacao {
         this.multaAtraso = multaAtraso;
     }
 
+    
+    //Calcula o valor total da locação com base na data de retirada - devolução e devolução - devoluçãoReal 
     public void calcularValorTotal() {
     	if (dataDevolucaoReal == null) {
             dataDevolucaoReal = "00-00-00"; 
@@ -126,6 +130,7 @@ public class Locacao {
         String[] devolucaoPrevistaParts = veiculoDevolucao.split("-");
         String[] devolucaoRealParts = dataDevolucaoReal.split("-"); // Usa a data real de devolução
 
+        //convertendo as String para inteiro
         int anoRetirada = Integer.parseInt(retiradaParts[0]);
         int mesRetirada = Integer.parseInt(retiradaParts[1]);
         int diaRetirada = Integer.parseInt(retiradaParts[2]);
@@ -148,19 +153,25 @@ public class Locacao {
                          (mesDevolucaoReal - mesRetirada) * 30 + 
                          (diaDevolucaoReal - diaRetirada);
 
-        this.diasLocados = diasPrevistos; // Os dias previstos são os dias originalmente locados
+        // atualiza o número de dias locados
+        if ("Ativa".equals(locacaoStatus)) {
+            this.diasLocados = diasPrevistos;
+        } else if ("Finalizada".equals(locacaoStatus)) {
+            this.diasLocados = diasTotais;
+        } 
         valorTotal = veiculo.calcularCustoLocacao(diasLocados);
 
-        // Calcula a multa apenas se a devolução foi depois da data prevista
+        // Calcula a multa se a devolução foi depois da data de devolução prevista
         int diasAtraso = diasTotais - diasPrevistos;
         if (diasAtraso > 0) {
-            multaAtraso = diasAtraso * 10.0; // Supondo R$10 por dia de atraso
+            multaAtraso = diasAtraso * 10.0; 
             valorTotal += multaAtraso;
         } else {
             multaAtraso = 0.0;
         }
     }
 
+    //Exibição das informações do objeto 
     public String toString() {
         return "\n--Locação de veículos--" +
                 "\n ID Locação= " + idLocacao  +
@@ -175,4 +186,5 @@ public class Locacao {
                 "\n Multa por atraso= " + multaAtraso;
     }
 }
+
 
